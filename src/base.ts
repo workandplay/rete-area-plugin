@@ -30,8 +30,8 @@ interface Area {
 export type BaseArea<Schemes extends BaseSchemes> =
   | { type: 'nodepicked', data: { id: string } }
   | { type: 'nodedragged', data: Schemes['Node'] }
-  | { type: 'nodetranslate', data: { id: string } & NodeTranslateEventParams }
-  | { type: 'nodetranslated', data: { id: string } & NodeTranslateEventParams }
+  | { type: 'nodetranslate', data: { id: string } & NodeTranslateEventParams, metadata?: any }
+  | { type: 'nodetranslated', data: { id: string } & NodeTranslateEventParams, metadata?: any }
   | { type: 'contextmenu', data: { event: MouseEvent, context: 'root' | Schemes['Node'] | Schemes['Connection'] } }
   | { type: 'pointerdown', data: { position: Position, event: PointerEvent } }
   | { type: 'pointermove', data: { position: Position, event: PointerEvent } }

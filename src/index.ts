@@ -70,11 +70,11 @@ export class AreaPlugin<Schemes extends BaseSchemes, ExtraSignals = never> exten
         pointerMove: (position, event) => this.emit({ type: 'pointermove', data: { position, event } }),
         pointerUp: (position, event) => this.emit({ type: 'pointerup', data: { position, event } }),
         resize: event => this.emit({ type: 'resized', data: { event } }),
-        translated: params => this.emit({ type: 'translated', data: params }),
+        translated: (params, metadata) => this.emit({ type: 'translated', data: params, metadata }),
         reordered: element => this.emit({ type: 'reordered', data: { element } })
       },
       {
-        translate: params => this.emit({ type: 'translate', data: params }),
+        translate: (params, metadata) => this.emit({ type: 'translate', data: params, metadata }),
         zoom: params => this.emit({ type: 'zoom', data: params })
       }
     )
@@ -90,13 +90,13 @@ export class AreaPlugin<Schemes extends BaseSchemes, ExtraSignals = never> exten
       () => this.area.transform.k,
       {
         picked: () => this.emit({ type: 'nodepicked', data: { id } }),
-        translated: data => this.emit({ type: 'nodetranslated', data: { id, ...data } }),
+        translated: (data, metadata) => this.emit({ type: 'nodetranslated', data: { id, ...data }, metadata }),
         dragged: () => this.emit({ type: 'nodedragged', data: node }),
         contextmenu: event => this.emit({ type: 'contextmenu', data: { event, context: node } }),
         resized: ({ size }) => this.emit({ type: 'noderesized', data: { id: node.id, size } })
       },
       {
-        translate: data => this.emit({ type: 'nodetranslate', data: { id, ...data } }),
+        translate: (data, metadata) => this.emit({ type: 'nodetranslate', data: { id, ...data }, metadata }),
         resize: ({ size }) => this.emit({ type: 'noderesize', data: { id: node.id, size } })
       }
     )
@@ -160,10 +160,10 @@ export class AreaPlugin<Schemes extends BaseSchemes, ExtraSignals = never> exten
     if (view) return await view.resize(width, height)
   }
 
-  public async translate(id: NodeId, { x, y }: Position) {
+  public async translate(id: NodeId, { x, y }: Position, metadata?: any) {
     const view = this.nodeViews.get(id)
 
-    if (view) return await view.translate(x, y)
+    if (view) return await view.translate(x, y, metadata)
   }
 
   public destroy() {

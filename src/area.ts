@@ -13,11 +13,11 @@ type Events = {
   pointerMove: (position: Position, event: PointerEvent) => void
   pointerUp: (position: Position, event: PointerEvent) => void
   resize: (event: Event) => void
-  translated: (params: TranslateEventParams) => Promise<unknown>
+  translated: (params: TranslateEventParams, metadata?: any) => Promise<unknown>
   reordered: (element: HTMLElement) => Promise<unknown>
 }
 type Guards = {
-  translate: (params: TranslateEventParams) => Promise<unknown | boolean>
+  translate: (params: TranslateEventParams, metadata?: any) => Promise<unknown | boolean>
   zoom: (params: ZoomEventParams) => Promise<unknown | boolean>
 }
 

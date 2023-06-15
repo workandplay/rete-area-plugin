@@ -3,7 +3,7 @@ import { PointerListener, usePointerListener } from './utils'
 
 type Events = {
   start: (e: PointerEvent) => void
-  translate: (x: number, y: number, e: PointerEvent) => void
+  translate: (x: number, y: number, e: PointerEvent, metadata?: any) => void
   drag: (e: PointerEvent) => void
 }
 

@@ -6,14 +6,14 @@ export type NodeResizeEventParams = { size: Size }
 
 type Events = {
   picked: () => void
-  translated: (params: NodeTranslateEventParams) => Promise<unknown | boolean>
+  translated: (params: NodeTranslateEventParams, metadata?: any) => Promise<unknown | boolean>
   dragged: () => void
   contextmenu: (event: MouseEvent) => void
   resized: (params: NodeResizeEventParams) => Promise<unknown | boolean>
 }
 type Guards = {
   resize: (params: NodeResizeEventParams) => Promise<unknown | boolean>
-  translate: (params: NodeTranslateEventParams) => Promise<unknown | boolean>
+  translate: (params: NodeTranslateEventParams, metadata?: any) => Promise<unknown | boolean>
 }
 
 export class NodeView {
@@ -25,7 +25,7 @@ export class NodeView {
     this.element = document.createElement('div')
     this.element.style.position = 'absolute'
     this.position = { x: 0, y: 0 }
-    this.translate(0, 0)
+    this.translate(0, 0, { passive: true })
 
     this.element.addEventListener('contextmenu', event => this.events.contextmenu(event))
 
@@ -38,23 +38,23 @@ export class NodeView {
       },
       {
         start: this.events.picked,
-        translate: this.translate,
+        translate: (x, y, e, metadata) => this.translate(x, y, metadata),
         drag: this.events.dragged
       }
     )
   }
 
-  public translate = async (x: number, y: number) => {
+  public translate = async (x: number, y: number, metadata?: any) => {
     type Params = undefined | { data: NodeTranslateEventParams }
     const previous = { ...this.position }
-    const translation = await this.guards.translate({ previous, position: { x, y } }) as Params
+    const translation = await this.guards.translate({ previous, position: { x, y } }, metadata) as Params
 
     if (!translation) return false
 
     this.position = { ...translation.data.position }
     this.element.style.transform = `translate(${this.position.x}px, ${this.position.y}px)`
 
-    await this.events.translated({ position: this.position, previous })
+    await this.events.translated({ position: this.position, previous }, metadata)
 
     return true
   }
