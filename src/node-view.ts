@@ -25,7 +25,7 @@ export class NodeView {
     this.element = document.createElement('div')
     this.element.style.position = 'absolute'
     this.position = { x: 0, y: 0 }
-    this.translate(0, 0, { passive: true })
+    this.translate(0, 0, { passive: true, source: 'nodeViewConstructor' })
 
     this.element.addEventListener('contextmenu', event => this.events.contextmenu(event))
 

@@ -54,6 +54,6 @@ export abstract class BaseAreaPlugin<Schemes extends BaseSchemes, Signals> exten
   abstract removeConnectionView(connection: ConnectionId): void
   abstract update(type: GetRenderTypes<Signals>, id: string): Promise<void | boolean | undefined>
   abstract resize(id: NodeId, width: number, height: number): Promise<void | boolean | undefined>
-  abstract translate(id: NodeId, position: Position): Promise<void | boolean | undefined>
+  abstract translate(id: NodeId, position: Position, metadata?: any): Promise<void | boolean | undefined>
   abstract destroy(): void
 }
